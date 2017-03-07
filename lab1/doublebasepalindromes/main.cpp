@@ -10,8 +10,13 @@ using namespace std;
 
 int main()
 {
-    for(int i=0; i<1000000;i++)
+    uint64_t suma;
+    int val=1000000;
 
+
+        suma=DoubleBasePalindromes(val);
+
+    cout<<"Suma podwojnych palindromow w przedziale od 0 do "<<val<<" wynosi "<<suma<<endl;
 
     return 0;
 }
