@@ -8,4 +8,4 @@ target_include_directories(libpalindrome PUBLIC .)
 
 add_executable(palindrome ${SOURCE_FILES} main.cpp Palindrome.cpp)
 
-target_link_libraries(palindrome libfactorial)
+target_link_libraries(palindrome libpalindrome)
