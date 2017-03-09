@@ -1,8 +1,3 @@
-//
-// Created by maria on 05.03.17.
-//
-
-
 #include "Show.h"
 #include <iostream>
 
