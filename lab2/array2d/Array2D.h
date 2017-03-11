@@ -6,7 +6,9 @@
 #define JIMP_EXERCISES_ARRAY2D_H
 #include <iostream>
 
-void get_number (int** tab, int row, int col);
 
+int ** Array2D(int n_rows, int n_columns);
+void printArray (int** tab, int row, int col);
+void DeleteArray2D(int **array, int n_rows, int n_columns);
 
 #endif //JIMP_EXERCISES_ARRAY2D_H

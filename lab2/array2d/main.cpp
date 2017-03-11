@@ -8,10 +8,10 @@ using namespace std;
 
 int main(void){
     int a,b;
-    cout<<"Give me 2 numers: "<<endl;
+    cout<<"Give me 2 numbers: "<<endl;
     cin>>a;
     cin>>b;
-    int* tab =
-    get_number(tab, a, b);
-
+    int **tab=Array2D(a, b);
+    printArray(tab, a, b);
+    DeleteArray2D(tab, a, b);
 }
