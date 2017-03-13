@@ -11,7 +11,7 @@ int main(void){
     cout<<"Give me 2 numbers: "<<endl;
     cin>>a;
     cin>>b;
-    int **tab=Array2D(a, b);
-    printArray(tab, a, b);
+    int **tab=NewArray2D(a, b);
+    PrintArray2D(tab, a, b);
     DeleteArray2D(tab, a, b);
 }
