@@ -4,22 +4,15 @@
 
 #include <iostream>
 #include "Array2D.h"
-
-
 using namespace std;
 
-int main()
-{
-    int **tab;
-    int x,y;
-    cout<<"Podaj ilosc wierszy:"<<endl;
-    cin>>x;
-    cout<<"Podaj ilosc kolumn:"<<endl;
-    cin>>y;
-
-    tab=Array2D(x,y);
-    FillArray2D(tab,x,y);
-    PrintArray(tab,x,y);
-    DeleteArray2D(tab,x,y);
-    return 0;
+int main(void){
+    int a,b;
+    cout<<"Give me 2 numbers: "<<endl;
+    cin>>a;
+    cin>>b;
+    int **tab=NewArray2D(a, b);
+    PrintArray2D(tab, a, b);
+    DeleteArray2D(tab, a, b);
 }
+
