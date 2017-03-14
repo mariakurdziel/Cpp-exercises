@@ -30,11 +30,12 @@ namespace minimaltimedifference {
                 if (i != j) {
                     x = ToMinutes(times[i]);
                     y = ToMinutes(times[j]);
-                    d = min(abs(x - y), x);
-                    e = min(abs(x - y), y);
+
+                    d = min(abs(x - y), 24 * 60 - max(x, y) + min(x, y));
+
 
                     if (d < mini) mini = d;
-                    if (e < mini) mini = e;
+
                 }
             }
 
