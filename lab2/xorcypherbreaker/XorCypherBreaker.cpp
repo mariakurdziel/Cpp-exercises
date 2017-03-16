@@ -25,7 +25,6 @@ string XorCypherBreaker(const vector<char> &cryptogram,int key_length, const vec
                 key.push_back(char(j));
                 key.push_back(char(k));
 
-
                 for (int l = 0; l < cryptogram.size(); l++)
                 {
                     if (n < 3)
@@ -52,13 +51,10 @@ string XorCypherBreaker(const vector<char> &cryptogram,int key_length, const vec
                     }
                     if (n == 3)
                         n = 0;
-
-                    if(l==cryptogram.size()-1)
-                    {
-                        message.emplace_back(word);
-                        word = "";
-                    }
                 }
+
+                message.emplace_back(word);
+                word = "";
 
     for (int i = 0; i < dictionary.size(); i++)
     {
