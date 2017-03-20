@@ -5,26 +5,26 @@
 #include "TinyUrl.h"
 
 using namespace std;
+using namespace tinyurl;
 
 
-int main()
-{
+    int main() {
 
-    auto codec=Init();
-    string url;
-    string bla;
-    string newurl;
-    string decode;
+        auto codec =Init();
+        string url;
+        string bla;
+        string newurl;
+        string decode;
 
-    cout<<"Podaj 6-znakowy adres URL:"<<endl;
-    cin>>url;
+        cout << "Podaj 6-znakowy adres URL:" << endl;
+        cin >> url;
+        newurl = Encode(url, &codec);
+        cout<<"Nowy URL: "<<newurl;
+        decode = Decode(codec,newurl);
+        cout<<endl;
+        cout<<"Stary URL: "<<decode<<endl;
 
-    newurl=Encode(url,&codec);
-    decode=Decode(&codec,newurl);
 
+        return 0;
 
-
-
-    return 0;
-
-}
+    }
