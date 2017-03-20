@@ -6,61 +6,90 @@
 
 using namespace std;
 
-struct TinyUrlCodec
-{
-    char tab[6];
-    string version1;
+namespace tinyurl {
 
-}TinyUrlCodec;
 
-unique_ptr<TinyUrlCodec> Init()
-{
-    unique_ptr<TinyUrlCodec> p = make_unique<TinyUrlCodec>();
-    return p;
-}
-
-void NextHash(array<char, 6> *state) {
-    int x = (int) (*state)[5];
-    bool end = true;
-    int k = 5;
-    while (end==true)
+    unique_ptr<struct TinyUrlCodec> Init()
     {
-        if (x >= 97 && x < 122)
-        {
-            (*state)[k] = (char) (x + 1);
-            end=false;
-        }
-        if (x >= 0 && x < 9)
-        {
-            (*state)[k] = (char) (x + 1);
-            end=false;
-        }
-        if (x == 122)
-        {
-            (*state)[k] ='0';
-            k--;
-        }
-        x = (int) (*state)[k];
+        return make_unique<struct TinyUrlCodec>();
     }
-}
-string Encode(const string &url, unique_ptr<TinyUrlCodec> *codec)
-{
-    string newurl;
-    (*codec)->version1=url;
-    NextHash(&((*codec)->tab[]));
 
-    for(int i=0;i<6;i++)
-        newurl+=(*codec)->tab[i];
+    void NextHash(array<char, 6> *state)
+    {
+        int x = (int) (*state)[5];
+        bool end = false;
+        int k = 5;
+        while (end == false) {
 
-    return newurl;
+            if(k==0)
+                end==true;
 
-}
+            if (x >= 97 && x < 122) {
+                (*state)[k] = (char) (x + 1);
+                end = true;
+            }
+            if (x >= 48 && x <57) {
+                (*state)[k] = (char) (x + 1);
+                end = true;
+            }
+            if(x>=65 && x<90)
+            {
+                (*state)[k] = (char) (x + 1);
+                end = true;
+            }
+            if(x==57)
+            {
+                (*state)[k]='A';
+                end=true;
+            }
+            if(x==90)
+            {
+                (*state)[k]='a';
+                end=true;
+            }
+            if (x == 122)
+            {
+                (*state)[k] = '0';
+                k--;
+            }
 
-string Decode(const unique_ptr<TinyUrlCodec> &codec, const string &hash)
-{
-    string dec;
 
-    dec=(*codec)->version1;
+            x = (int) (*state)[k];
+        }
+    }
 
-    return dec;
+    string Encode(const string &url, unique_ptr<struct TinyUrlCodec> *codec)
+    {
+        string newurl;
+
+        for(int i=0; i<6;i++)
+            (*codec)->tab[i]=url[i];
+
+        NextHash(&(*codec)->tab);
+
+        for (int i = 0; i < 6; i++)
+            newurl += (*codec)->tab[i];
+
+        (*codec)->url_map[newurl] = url;
+        (*codec)->url_map["000000"]="000000";
+
+
+
+        return newurl;
+
+    }
+
+    string Decode(const unique_ptr<struct TinyUrlCodec> &codec, const string &hash)
+    {
+        map <string,string>::iterator pos;
+        pos=(*codec).url_map.end();
+
+        map<string, string>::iterator prev = pos;
+        prev--;
+
+        string decode=prev->second;
+
+        return decode;
+
+    }
 }
