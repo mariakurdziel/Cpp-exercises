@@ -10,11 +10,8 @@ using namespace datastructures;
 
 int main()
 {
-
-
-    unique_ptr <SmartTree> root=CreateLeaf(50);
-
-
-
+    string tree="[99 [100 [1234 [none] [none]] [4321 [none] [none]]] "
+            "[88 [897 [none] [none]] [761 [none] [none]]]]";
+    cout << datastructures::DumpTree(datastructures::RestoreTree(tree));
     return 0;
 }
