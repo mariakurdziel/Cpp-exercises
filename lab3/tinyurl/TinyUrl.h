@@ -20,7 +20,7 @@ namespace tinyurl
 {
     struct TinyUrlCodec
     {
-        map<string, string> url_map={{"00000","00000"}};
+        map<string, string> url_map;
         array<char, 6> tab;
     };
 

@@ -23,8 +23,6 @@ using namespace tinyurl;
         decode = Decode(codec,newurl);
         cout<<endl;
         cout<<"Stary URL: "<<decode<<endl;
-
-
         return 0;
 
     }
