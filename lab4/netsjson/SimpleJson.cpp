@@ -2,79 +2,79 @@
 // Created by maria on 27.03.17.
 //
 
-#include "SimpleJson.h"
 
+#include "SimpleJson.h"
 
 namespace nets
 {
-    JsonValue::JsonValue(const string name)
+    JsonValue::JsonValue(const int x) : obj(to_string(x)) {}
+    JsonValue::JsonValue(const double x) {
+        stringstream stream;
+        stream << x;
+        obj = stream.str();
+    }
+    JsonValue::JsonValue(const bool x) {
+        obj = (x ? "true" : "false");
+    }
+    JsonValue::JsonValue(const std::string &name) {
+        string str = name;
+        obj += "\"";
+        replace_substr(str, "\\", "\\\\");
+        replace_substr(str, "\"", "\\\"");
+        obj += str;
+        obj += "\"";
+    }
+
+    void JsonValue::replace_substr(string &str, const string &pattern1, const string &pattern2) const
     {
-        word=name;
-        type='s';
+        size_t index = 0;
+        while (true) {
+            index = str.find(pattern1, index);
+            if (index == string::npos)
+                break;
+
+            str.replace(index, pattern1.length(), pattern2);
+            index += pattern2.length();
+        }
     }
 
-
-    JsonValue::JsonValue(int numberc) {
-        number1=numberc;
-        type='c';
-    }
-
-    JsonValue::JsonValue(double numberz) {
-        number2=numberz;
-        type='z';
-    }
-
-    JsonValue::JsonValue(bool value) {
-        val=value;
-        type='b';
-
-    }
-
-    JsonValue::JsonValue(vector<JsonValue> v)
+    JsonValue::JsonValue(const std::vector<JsonValue> &array)
     {
-      tab=v;
-      type='v';
-    }
-
-    JsonValue::JsonValue(map<string, JsonValue> obj)
-    {
-     object=obj;
-     type='m';
+        obj += "[";
+        obj += array[0].ToString();
+        for (auto i = array.begin() + 1; i < array.end(); ++i)
+        {
+            obj += ", ";
+            obj += (*i).ToString();
+        }
+        obj += "]";
     }
 
     JsonValue::~JsonValue()
-    {}
+    {
 
+    }
+
+    JsonValue::JsonValue(const map<string, JsonValue> &map1)
+    {
+        obj += "{";
+        auto el = (*map1.begin());
+        obj += JsonValue(el.first).ToString() + ": ";
+        obj += el.second.ToString();
+
+        for (auto i = next(map1.begin()); i != map1.end(); ++i)
+        {
+            obj += ", ";
+            obj += JsonValue((*i).first).ToString() + ": ";
+            obj += (*i).second.ToString();
+        }
+        obj += "}";
+    }
 
     std::experimental::optional<JsonValue> JsonValue::ValueByName(const std::string &name) const
     {
-
-        return experimental::optional<JsonValue>();
+        return std::experimental::optional<JsonValue>();
     }
 
-    std::string JsonValue::ToString() const {
-
-        string string1;
-
-        if(type=='s')
-        {
-
-            return string1;
-        }
-
-        if(type=='c')
-            return to_string(number1);
-        if(type=='z')
-            return to_string(number2);
-        if(type=='b')
-        {
-            if (val==1)
-                return "true";
-            else
-                return "false";
-        }
-
-    }
-
-
+    std::string JsonValue::ToString() const { return obj; }
 }
