@@ -37,6 +37,7 @@ namespace nets
         bool val;
         vector <JsonValue> tab;
         map <string,JsonValue> object;
+        char type;
 
 
 

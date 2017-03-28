@@ -1,5 +1,5 @@
 //
-// Created by maria on 25.03.17.
+// Created by maria on 27.03.17.
 //
 
 #ifndef JIMP_EXERCISES_SIMPLETEMPLATEENGINE_H
@@ -7,22 +7,18 @@
 
 #include <string>
 #include <unordered_map>
-#include <iostream>
-#include <regex>
+#include <ostream>
 
 namespace nets
 {
-#include <unordered_map>
-#include <string>
- using namespace std;
+    using namespace std;
 
 
     class View
     {
     public:
-        View();
 
-        View(const string message);
+        View(string message);
 
         ~View();
 
@@ -33,5 +29,4 @@ namespace nets
 
     };
 }
-
 #endif //JIMP_EXERCISES_SIMPLETEMPLATEENGINE_H
