@@ -64,10 +64,7 @@ namespace datastructures
     private:
         string file;
         char word[50];
-        int count;
         std::vector <Word> map;
-        std::vector<std::pair<Word,Counts>> pom;
-
 
     };
 

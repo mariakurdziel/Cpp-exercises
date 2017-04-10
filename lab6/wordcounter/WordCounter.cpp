@@ -76,16 +76,16 @@ namespace datastructures
 */
     WordCounter::WordCounter()
     {
-        pom={};
         bool flag=true;
-        int i,j;
+        int i;
+        std::list<std::pair<Word, Counts>>:: iterator it;
         for( i=0; i<map.size();i++)
         {
-            for (j=0;j<pom.size();j++)
+            for (it=index.begin();it!=index.end();it++)
             {
-                if(map[i].GetWord()==pom[j].first.GetWord())
+                if(map[i].GetWord()==(*it).first.GetWord())
                 {
-                    pom[j].second = Counts(pom[j].second.GetCounter() + 1);
+                    (*it).second = Counts((*it).second.GetCounter() + 1);
                     flag=false;
                     break;
                 }
@@ -94,7 +94,6 @@ namespace datastructures
             if(flag==true)
             {
                 auto p = make_pair(map[i],Counts(1));
-                pom.push_back(p);
                 index.push_back(p);
             }
 
