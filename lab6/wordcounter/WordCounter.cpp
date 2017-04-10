@@ -44,7 +44,7 @@ namespace datastructures
         return counter==count.counter;
     }
 
-    Counts& Counts::operator++(){
+   Counts& Counts::operator++(){
         counter++;
         return *this;
     }
@@ -77,30 +77,28 @@ namespace datastructures
 */
     WordCounter::WordCounter()
     {
-        int count=0;
         bool flag=true;
-
+        int j;
         for(int i=0; i<map.size();i++)
         {
-            for (int j = 0; j < map.size(); j++)
+            for (j=0;j<pom.size();j++)
             {
-                if(map[i].GetWord()==map[j].GetWord())
-                    count++;
-            }
-            Word w(map[i]);
-            Counts c(count);
-            auto p=make_pair(w,c);
-            std::list<std::pair<Word,Counts>>::const_iterator it;
-            for (it = index.begin(); it != index.end(); ++it) {
-                if(map[i].GetWord()==(*it).first.GetWord())
+                if(map[i].GetWord()==pom[j].first.GetWord())
                 {
+                    pom[j].second = Counts(pom[j].second.GetCounter() + 1);
                     flag=false;
                     break;
                 }
+
             }
             if(flag==true)
+            {
+                auto p = make_pair(map[i],Counts(1));
+                pom.push_back(p);
                 index.push_back(p);
+            }
 
+        flag=true;
         }
     }
 
@@ -118,7 +116,7 @@ namespace datastructures
 
     int WordCounter::DistinctWords()
     {
-     return index.size();
+        return pom.size();
     }
 
     int WordCounter::TotalWords()
