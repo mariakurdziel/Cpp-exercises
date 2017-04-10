@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <list>
+#include <set>
 #include <algorithm>
 #include <map>
 
@@ -55,7 +56,7 @@ namespace datastructures
         WordCounter(string name);
         WordCounter(std::initializer_list<Word> vec):map(vec){};
         int operator[](string word);
-        std::vector <Word> Words();
+        std::set <Word> Words();
         int DistinctWords();
         int TotalWords();
         ~WordCounter();

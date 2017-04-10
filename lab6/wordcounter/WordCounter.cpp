@@ -126,12 +126,12 @@ namespace datastructures
         return map.size();
     }
 
-    std::vector <Word> WordCounter::Words()
+    std::set <Word> WordCounter::Words()
      {
-         vector <Word> vec={};
+         set <Word> vec={};
 
          for(int i=0; i<map.size();i++)
-             vec.push_back(map[i]);
+             vec.insert(map[i]);
 
 
          return vec;
