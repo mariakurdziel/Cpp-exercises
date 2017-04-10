@@ -6,22 +6,47 @@
 
 namespace datastructures
 {
+    Word::Word() {
+}
+
 
     Word::Word(string word) {
         key = word;
     }
 
-    string Word::GetWord()
+    string Word::GetWord() const
     {
         return key;
     }
 
+    Word::operator string() const{
+        return key;
+    }
+    bool Word::operator==(const Word& word) const {
+        return key==word.key;
+    }
+    bool Word::operator<(const Word& word) const {
+        return key<word.key;
+    }
+    bool Word::operator>(const Word& word) const {
+        return key>word.key;
+    }
     Word::~Word() {
     }
 
-
+    Counts::Counts() {
+    }
     Counts::Counts(int count) {
         counter = count;
+    }
+
+    bool Counts::operator==(const Counts& count) const {
+        return counter==count.counter;
+    }
+
+    Counts& Counts::operator++(){
+        counter++;
+        return *this;
     }
 
     int Counts::GetCounter()
@@ -50,10 +75,10 @@ namespace datastructures
 
     }
 */
-    WordCounter::WordCounter(std::vector <Word> x)
+    WordCounter::WordCounter()
     {
-        map=x;
         int count=0;
+        bool flag=true;
 
         for(int i=0; i<map.size();i++)
         {
@@ -65,19 +90,31 @@ namespace datastructures
             Word w(map[i]);
             Counts c(count);
             auto p=make_pair(w,c);
-            std::list<std::pair<Word, Counts>> ::iterator it = find_if( index.begin(), index.end(),&p);
-            if(it!=index.end())
-                count=0;
-            else
-            {
-                count=0;
-                index.push_back(p);
+            std::list<std::pair<Word,Counts>>::const_iterator it;
+            for (it = index.begin(); it != index.end(); ++it) {
+                if(map[i].GetWord()==(*it).first.GetWord())
+                {
+                    flag=false;
+                    break;
+                }
             }
+            if(flag==true)
+                index.push_back(p);
 
         }
     }
 
+    int WordCounter::operator[](string word)
+    {
+        int counter=0;
+        for(int i=0; i<map.size();i++)
+        {
+            if(map[i].GetWord()==word)
+                counter++;
+        }
 
+        return counter;
+    }
 
     int WordCounter::DistinctWords()
     {
@@ -91,7 +128,10 @@ namespace datastructures
 
     std::vector <Word> WordCounter::Words()
      {
-         vector <Word> vec;
+         vector <Word> vec={};
+
+         for(int i=0; i<map.size();i++)
+             vec.push_back(map[i]);
 
 
          return vec;
@@ -101,4 +141,5 @@ namespace datastructures
 
     WordCounter::~WordCounter() {
     }
+
 }

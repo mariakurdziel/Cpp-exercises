@@ -19,8 +19,13 @@ namespace datastructures
 {
     class Word {
     public:
+        Word();
+        operator string() const;
+        bool operator==(const Word& word) const;
+        bool operator<(const Word& word) const;
+        bool operator>(const Word& word) const;
         Word(string word);
-        string GetWord();
+        string GetWord() const;
         ~Word();
 
     private:
@@ -30,6 +35,10 @@ namespace datastructures
 
     class Counts {
     public:
+        Counts();
+        operator string() const;
+        bool operator==(const Counts& counts) const;
+        Counts &operator++();
         Counts(int count);
         int GetCounter();
         ~Counts();
@@ -42,8 +51,10 @@ namespace datastructures
     {
     public:
         std::list<std::pair<Word, Counts>> index;
+        WordCounter();
         WordCounter(string name);
-        WordCounter(std::vector <Word> x);
+        WordCounter(std::initializer_list<Word> vec):map(vec){};
+        int operator[](string word);
         std::vector <Word> Words();
         int DistinctWords();
         int TotalWords();
@@ -57,5 +68,7 @@ namespace datastructures
 
 
     };
+
+
 }
 #endif //JIMP_EXERCISES_WORDCOUNTER_H
