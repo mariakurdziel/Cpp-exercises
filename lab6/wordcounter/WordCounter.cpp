@@ -57,8 +57,7 @@ namespace datastructures
     Counts::~Counts() {
     }
 
-
-   /* WordCounter::WordCounter(string name) {
+/* WordCounter::WordCounter(string name) {
         string onew;
         file = name;
         ifstream myfile(file);
@@ -77,9 +76,10 @@ namespace datastructures
 */
     WordCounter::WordCounter()
     {
+        pom={};
         bool flag=true;
-        int j;
-        for(int i=0; i<map.size();i++)
+        int i,j;
+        for( i=0; i<map.size();i++)
         {
             for (j=0;j<pom.size();j++)
             {
@@ -100,7 +100,9 @@ namespace datastructures
 
         flag=true;
         }
-    }
+
+   }
+
 
     int WordCounter::operator[](string word)
     {
@@ -116,7 +118,18 @@ namespace datastructures
 
     int WordCounter::DistinctWords()
     {
-        return pom.size();
+        int c=0;
+        int i;
+        vector <Word> s;
+        for(int i=0; i<map.size();i++) {
+            if (std::find(s.begin(), s.end(), map[i]) != s.end())
+                c++;
+
+            if (c == 0)
+                s.push_back(map[i]);
+            c = 0;
+        }
+        return s.size();
     }
 
     int WordCounter::TotalWords()

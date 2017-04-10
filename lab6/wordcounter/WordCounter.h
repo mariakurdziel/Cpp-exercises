@@ -52,7 +52,6 @@ namespace datastructures
     {
     public:
         std::list<std::pair<Word, Counts>> index;
-        /*WordCounter();*/
         WordCounter();
         WordCounter(string name);
         WordCounter(std::initializer_list<Word> vec):map(vec){};
