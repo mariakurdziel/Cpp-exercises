@@ -33,7 +33,7 @@ namespace datastructures
     }
 
 
-    WordCounter::WordCounter(string name) {
+   /* WordCounter::WordCounter(string name) {
         string onew;
         file = name;
         ifstream myfile(file);
@@ -49,13 +49,35 @@ namespace datastructures
         }
 
     }
-
-    WordCounter::WordCounter(std::list <Word> map)
+*/
+    WordCounter::WordCounter(std::vector <Word> x)
     {
+        map=x;
+        int count=0;
 
+        for(int i=0; i<map.size();i++)
+        {
+            for (int j = 0; j < map.size(); j++)
+            {
+                if(map[i].GetWord()==map[j].GetWord())
+                    count++;
+            }
+            Word w(map[i]);
+            Counts c(count);
+            auto p=make_pair(w,c);
+            std::list<std::pair<Word, Counts>> ::iterator it = find_if( index.begin(), index.end(),&p);
+            if(it!=index.end())
+                count=0;
+            else
+            {
+                count=0;
+                index.push_back(p);
+            }
 
-
+        }
     }
+
+
 
     int WordCounter::DistinctWords()
     {
@@ -64,12 +86,15 @@ namespace datastructures
 
     int WordCounter::TotalWords()
     {
-
+        return map.size();
     }
 
-    std::list<std::pair<Word, Counts>> WordCounter::Words()
+    std::vector <Word> WordCounter::Words()
      {
+         vector <Word> vec;
 
+
+         return vec;
      }
 
 

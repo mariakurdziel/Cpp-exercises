@@ -42,10 +42,9 @@ namespace datastructures
     {
     public:
         std::list<std::pair<Word, Counts>> index;
-        WordCounter();
         WordCounter(string name);
-        WordCounter(std::list <Word> x);
-        std::list<std::pair<Word, Counts>> Words();
+        WordCounter(std::vector <Word> x);
+        std::vector <Word> Words();
         int DistinctWords();
         int TotalWords();
         ~WordCounter();
@@ -54,7 +53,7 @@ namespace datastructures
         string file;
         char word[50];
         int count=0;
-        std::list <Word> map;
+        std::vector <Word> map;
 
 
     };
