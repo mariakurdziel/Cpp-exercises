@@ -56,6 +56,7 @@ namespace datastructures
         WordCounter(string name);
         WordCounter(std::initializer_list<Word> vec):map(vec){};
         int operator[](string word);
+        ostream & operator<<();
         std::set <Word> Words();
         int DistinctWords();
         int TotalWords();
