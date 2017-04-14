@@ -18,6 +18,7 @@ using namespace std;
 
 namespace datastructures
 {
+
     class Word {
     public:
         Word();
@@ -56,7 +57,7 @@ namespace datastructures
         WordCounter(string name);
         WordCounter(std::initializer_list<Word> vec):map(vec){};
         int operator[](string word);
-        ostream & operator<<();
+        ostream & operator<< (ostream &wyjscie);
         std::set <Word> Words();
         int DistinctWords();
         int TotalWords();
@@ -67,8 +68,8 @@ namespace datastructures
         char word[50];
         std::vector <Word> map;
 
-    };
 
+    };
 
 }
 #endif //JIMP_EXERCISES_WORDCOUNTER_H

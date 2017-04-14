@@ -4,10 +4,12 @@
 
 #include "WordCounter.h"
 
-namespace datastructures
-{
+namespace datastructures {
+
+
+
     Word::Word() {
-}
+    }
 
 
     Word::Word(string word) {
@@ -99,7 +101,6 @@ namespace datastructures
 
         flag=true;
         }
-
    }
 
 
@@ -113,6 +114,15 @@ namespace datastructures
         }
 
         return counter;
+    }
+
+    ostream & WordCounter::operator<< (ostream &wyjscie)
+    {
+        std::list<std::pair<Word, Counts>>:: iterator it;
+        for (it=index.begin();it!=index.end();it++)
+        {
+            return wyjscie<<"Słowo: "<<(*it).first.GetWord()<<" Ilosc wystapien: "<<(*it).second.GetCounter()<<endl;
+        }
     }
 
     int WordCounter::DistinctWords()
@@ -146,8 +156,6 @@ namespace datastructures
 
          return vec;
      }
-
-
 
     WordCounter::~WordCounter() {
     }
