@@ -59,49 +59,13 @@ namespace datastructures {
     Counts::~Counts() {
     }
 
-/* WordCounter::WordCounter(string name) {
-        string onew;
-        file = name;
-        ifstream myfile(file);
-
-        while(myfile >> word)
-        {
-            for(int i=0; word[i]!='\0';i++)
-                onew+=word[i];
-            Word w(onew);
-            map.push_back(w);
-            onew="";
-
-        }
-
+    WordCounter::WordCounter() {
     }
-*/
-    WordCounter::WordCounter()
+
+    WordCounter::WordCounter(istream &is)
     {
-        bool flag=true;
-        int i;
-        std::list<std::pair<Word, Counts>>:: iterator it;
-        for( i=0; i<map.size();i++)
-        {
-            for (it=index.begin();it!=index.end();it++)
-            {
-                if(map[i].GetWord()==(*it).first.GetWord())
-                {
-                    (*it).second = Counts((*it).second.GetCounter() + 1);
-                    flag=false;
-                    break;
-                }
-
-            }
-            if(flag==true)
-            {
-                auto p = make_pair(map[i],Counts(1));
-                index.push_back(p);
-            }
-
-        flag=true;
-        }
-   }
+        is_=&is;
+    }
 
 
     int WordCounter::operator[](string word)
@@ -123,6 +87,45 @@ namespace datastructures {
         {
             return wyjscie<<"Słowo: "<<(*it).first.GetWord()<<" Ilosc wystapien: "<<(*it).second.GetCounter()<<endl;
         }
+    }
+
+    void WordCounter::FromInputStream()
+    {
+        bool flag=true;
+        string onew;
+        int i;
+        std::list<std::pair<Word, Counts>>:: iterator it;
+
+        while((*is_)>>word)
+        {
+            for(int i=0; word[i]!='/0';i++)
+             onew+=word[i];
+
+            map.push_back(Word(onew));
+            onew="";
+        }
+
+        for( i=0; i<map.size();i++)
+        {
+            for (it=index.begin();it!=index.end();it++)
+            {
+                if(map[i].GetWord()==(*it).first.GetWord())
+                {
+                    (*it).second = Counts((*it).second.GetCounter() + 1);
+                    flag=false;
+                    break;
+                }
+
+            }
+            if(flag==true)
+            {
+                auto p = make_pair(map[i],Counts(1));
+                index.push_back(p);
+            }
+
+            flag=true;
+        }
+
     }
 
     int WordCounter::DistinctWords()
