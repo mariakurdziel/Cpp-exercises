@@ -55,22 +55,18 @@ namespace datastructures
         std::list<std::pair<Word, Counts>> index;
         std::set <Word> Words();
         WordCounter();
-        WordCounter(istream &is);
-        WordCounter(string name);
         WordCounter(std::initializer_list<Word> vec):map(vec){};
         int operator[](string word);
         ostream & operator<< (ostream &wyjscie);
-        void FromInputStream();
+        void FromInputStream(ifstream &is);
         int DistinctWords();
         int TotalWords();
         ~WordCounter();
 
     private:
         string file;
-        char word[50];
-        istream *is_;
         std::vector <Word> map;
-
+        ifstream *is_;
 
     };
 

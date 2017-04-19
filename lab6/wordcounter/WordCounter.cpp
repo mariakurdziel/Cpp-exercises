@@ -62,11 +62,11 @@ namespace datastructures {
     WordCounter::WordCounter() {
     }
 
-    WordCounter::WordCounter(istream &is)
+    /*WordCounter::WordCounter(istream &is)
     {
         is_=&is;
     }
-
+*/
 
     int WordCounter::operator[](string word)
     {
@@ -89,16 +89,18 @@ namespace datastructures {
         }
     }
 
-    void WordCounter::FromInputStream()
+    void WordCounter::FromInputStream(ifstream &is)
     {
         bool flag=true;
         string onew;
+        char word[50];
         int i;
         std::list<std::pair<Word, Counts>>:: iterator it;
 
-        while((*is_)>>word)
+
+        while(is>>word)
         {
-            for(int i=0; word[i]!='/0';i++)
+            for(int i=0; word[i]!='/0' || word[i]!='!' || word[i]!=',' || word[i]!='.'||word[i]!='?';i++)
              onew+=word[i];
 
             map.push_back(Word(onew));
