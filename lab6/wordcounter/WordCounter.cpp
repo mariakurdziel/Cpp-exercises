@@ -62,11 +62,6 @@ namespace datastructures {
     WordCounter::WordCounter() {
     }
 
-    /*WordCounter::WordCounter(istream &is)
-    {
-        is_=&is;
-    }
-*/
 
     int WordCounter::operator[](string word)
     {
