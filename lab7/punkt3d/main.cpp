@@ -5,6 +5,8 @@
 
 #include "Point3D.h"
 
+using namespace std;
+
 int main()
 {
     Point3D a(2, 3, 4);
@@ -13,12 +15,17 @@ int main()
     c=a.DoubleDistance(b);
     std::cout<<c;
 
-    Point3D point3d();
-    Point point2d();
-    //c=point2d.Distance(point3d); - nie działa, jeden ma 2 parametry, drugi 3
+    //Zad6
+    //Funkcja została wywołana, ale jedynie dla pierwszych dwóch współrzędnych, bo funkcja w klasie macierzystej jest utworzona, by liczyć  odległość dla 2 współrzędnych.//
+    Point3D point3d(4,4,4);
+    Point point2d(3,3);
+    double d=point2d.Distance(point3d);
+    std::cout<<d<<std::endl;
 
+    //Zad7
+    //Funkcja została wywołana i zwraca jedynie dwie pierwsze współrzędne.
     Point3D p3d(1,2,3);
-    //cout << p3d << endl; - nie można wypisać
+    cout<< p3d<<endl;
 
 
     return 0;

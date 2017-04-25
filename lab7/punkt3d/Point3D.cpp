@@ -31,8 +31,9 @@ double Point::Distance(const Point &other) const {
     return sqrt(pow(GetX() - other.GetX(), 2) + pow(GetY() - other.GetY(), 2));
 }
 
-void Point::ToString(ostream *out) const {
-    (*out) << "(" << GetX() << ";" << GetY() << ")";
+ostream &operator<<(ostream &os, const Point &point) {
+    os << "x_: " << point.x_ << " y_: " << point.y_;
+    return os;
 }
 
 double Point::GetX() const {

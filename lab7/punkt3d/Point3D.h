@@ -11,6 +11,7 @@
 #include <cmath>
 #include <ostream>
 
+using namespace std;
 
 class Point {
 public:
@@ -22,6 +23,9 @@ public:
     double Distance(const Point &other) const;
 
     double GetX() const;
+
+    friend ostream &operator<<(ostream &os, const Point &point);
+
     double GetY() const;
 
     void SetX(double x);
