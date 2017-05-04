@@ -77,12 +77,4 @@ istream& operator>>(istream & input, Student& s){
     CheckNextChar(')', &input);
     return input;      // Umożliwia cin >> a >> b >> c;
 }
-ostream& operator<<(ostream &output, Point& p){
-    CheckNextChar('(', &output);
-    p.SetX(ReadNumber(&output);
-    CheckNextChar(',',&output);
-    IgnoreWhitespace(&output);
-    p.SetY(ReadNumber(&output);
-    CheckNextChar(')',&output);
-    return &output;
-}{id: „2030001234”, first_name: „Arkadiusz”, last_name: „Kowalski”, program: „informatyka”, year: 2}
+{id: „2030001234”, first_name: „Arkadiusz”, last_name: „Kowalski”, program: „informatyka”, year: 2}

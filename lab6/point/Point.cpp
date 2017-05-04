@@ -43,6 +43,11 @@ void Point::ToString(ostream *out) const{
     (*out) << "(" << GetX() << ";" << GetY() << ")";
 }
 
+ostream &operator<<(ostream &os, const Point &point) {
+    os << "x_: " << point.x_ << " y_: " << point.y_;
+    return os;
+}
+
 //Helper functions:
 void CheckNextChar(char c, istream* is) {
     int next_char = is->peek();
@@ -70,13 +75,4 @@ istream& operator>>(istream &input, Point& p){
     p.SetY(ReadNumber(&input));
     CheckNextChar(')', &input);
     return input;
-}
-ostream& operator<<(ostream &output, Point& p){
-    CheckNextChar('(', &output);
-    p.SetX(ReadNumber(&output));
-    CheckNextChar(',',&output);
-    IgnoreWhitespace(&output);
-    p.SetY(ReadNumber(&output));
-    CheckNextChar(')',&output);
-    return output;
 }

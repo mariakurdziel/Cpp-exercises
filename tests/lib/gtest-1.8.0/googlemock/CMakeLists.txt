@@ -1,11 +1,11 @@
 ########################################################################
-# CMake build script for Google Mock.
+# CMakeLists.txt build script for Google Mock.
 #
 # To run the tests for Google Mock itself on Linux, use 'make test' or
 # ctest.  You can select which tests to run using 'ctest -R regex'.
 # For more options, run 'ctest --help'.
 
-# BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
+# BUILD_SHARED_LIBS is a standard CMakeLists.txt variable, but we declare it here to
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
@@ -33,7 +33,7 @@ endif()
 
 # Name of the project.
 #
-# CMake files in this project can refer to the root source directory
+# CMakeLists.txt files in this project can refer to the root source directory
 # as ${gmock_SOURCE_DIR} and to the root binary directory as
 # ${gmock_BINARY_DIR}.
 # Language "C" is required for find_package(Threads).
@@ -44,13 +44,13 @@ if (COMMAND set_up_hermetic_build)
   set_up_hermetic_build()
 endif()
 
-# Instructs CMake to process Google Test's CMakeLists.txt and add its
+# Instructs CMakeLists.txt to process Google Test's CMakeLists.txt.txt and add its
 # targets to the current scope.  We are placing Google Test's binary
 # directory in a subdirectory of our own as VC compilation may break
 # if they are the same (the default).
 add_subdirectory("${gtest_dir}" "${gmock_BINARY_DIR}/gtest")
 
-# Although Google Test's CMakeLists.txt calls this function, the
+# Although Google Test's CMakeLists.txt.txt calls this function, the
 # changes there don't affect the current scope.  Therefore we have to
 # call it again here.
 config_compiler_and_linker()  # from ${gtest_dir}/cmake/internal_utils.cmake
@@ -92,7 +92,7 @@ cxx_library(gmock_main
             src/gmock-all.cc
             src/gmock_main.cc)
 
-# If the CMake version supports it, attach header directory information
+# If the CMakeLists.txt version supports it, attach header directory information
 # to the targets for when we are part of a parent build (ie being pulled
 # in via add_subdirectory() rather than being a standalone build).
 if (DEFINED CMAKE_VERSION AND NOT "${CMAKE_VERSION}" VERSION_LESS "2.8.11")
