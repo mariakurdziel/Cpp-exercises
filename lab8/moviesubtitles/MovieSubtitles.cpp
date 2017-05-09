@@ -4,129 +4,190 @@
 
 #include "MovieSubtitles.h"
 
+#include "MovieSubtitles.h"
+
 namespace moviesubs {
-    MovieSubtitles::MovieSubtitles() {
+    using namespace std;
+
+
+    void moviesubs::MovieSubtitles::ShiftAllSubtitlesBy(int delay, int fps, istream *input, ostream *output) {
+        int nrline=1;
+        while (not input->eof()) {
+            Delay(delay, fps, input, output, nrline);
+            nrline++;
+        }
 
     }
 
-    MovieSubtitles::~MovieSubtitles() {
-
-    }
-
-    void MicroDvdSubtitles::ShiftAllSubtitlesBy(int delay, int fps, istream *in, ostream *out)
-    {
-
-        int del = delay_(delay, fps);
-        bool flag=true;
-        int licz1=0,licz2=0,licz3=0,licz4=0;
-        int j=0,k=0,m=0;
+    void MicroDvdSubtitles::Delay(int delay, int fps, istream *input, ostream *output, int nrline) {
+        int time = 0, dif = 0;
+        dif = fps * delay / 1000;
+        string s, s1, p;
         int counter=0;
-        string output,tmp;
-        string numbers,words;
-        vector<string> vec={};
-        vector<string> tmp2;
-        vector <string> num;
-        ostringstream os;
+        bool flag=false;
+        vector<int> num;
+        getline(*input, s);
+        regex pattern{R"(\{(\d+)\})"};
+        smatch matches;
 
+        if (fps < 0)
+            throw invalid_argument("fps cant be negative!");
+        if (delay < 0)
+            throw NegativeFrameAfterShift(s, nrline);
+        s1=s;
 
-        os << (*in).rdbuf();
-        string input = os.str();
-
-        if(input[input.size()-1]!='\n')
-            input+="\n";
-
-        if(delay<0)
-            throw NegativeFrameAfterShift();
-
-        while (k < input.size())
-        {
-            if (input[k] == '{')
-            {
-                vec.push_back(words);
-                words="";
-                while (input[k]!='}' && k<input.size())
-                {
-                    numbers+= input[k];
-                    k++;
-
-                }
-                numbers+='}';
-                k++;
-                vec.push_back(numbers);
-                numbers = "";
+            if (s.empty()) return;
+            while (regex_search(s, matches, pattern)) {
+                if (matches[1].str() == "") throw InvalidSubtitleLineFormat(s1, nrline);
+                time = stoi(matches[1].str());
+                counter++;
+                num.push_back(time);
+                time += dif;
+                *output << "{" << time << "}";
+                s = matches.suffix().str();
             }
-            else
-            {
-                words+=input[k];
-                k++;
-            }
-        }
-            vec.push_back(words);
+            if(num[1]<num[0] && flag!=true)
+                throw SubtitleEndBeforeStart(s1,nrline);
+            if(counter!=2)
+                throw InvalidSubtitleLineFormat(s1, nrline);
 
-        for(int i=0; i<vec.size();i++)
-        {
-            counter=0;
-
-            if(vec[i][0]=='{')
-            {
-                for(int n=1;n<vec[i].size()-1;n++)
-                {
-                    if(int(vec[i][n])>=48 && int(vec[i][n])<=57)
-                        counter++;
-                }
-
-                if(counter==vec[i].size()-2)
-                    flag=true;
-                else
-                    flag=false;
-
-               if(flag==false || (j==vec[i].size()-1) && vec[i][vec[i].size()-1]!='}')
-                   throw InvalidSubtitleLineFormat();
-
-                   output +='{';
-                   for(int k=1; k<vec[i].size()-1;k++)
-                       tmp+=vec[i][k];
-
-                   if(tmp.size()>0 && flag==true)
-                   {
-                       tmp2.push_back(tmp);
-                       output+=to_string(stoi(tmp)+del);
-                   }
-                   else
-                       output+=tmp;
-                   output +='}';
-                   tmp="";
-            }
-            else
-                output+=vec[i];
-        }
-
-        if(tmp2.size()<4)
-            throw InvalidSubtitleLineFormat();
-        else
-        {
-            licz1=stoi(tmp2[0]);
-            licz2=stoi(tmp2[1]);
-            licz3=stoi(tmp2[2]);
-            licz4=stoi(tmp2[3]);
-
-            if(licz1>licz2 || licz3>licz4)
-                throw SubtitleEndBeforeStart(input);
-
-        }
-
-        *out<<output;
-
-    }
-
-    int MicroDvdSubtitles::delay_(int del, int framerate) {
-        double permili = (framerate*del) / 1000;
-        return permili;
+            if (s != "")
+                *output << s << "\n";
     }
 
 
-    int SubtitleEndBeforeStart::LineAt()
+    string inputtostring(istream &input) {
+        std::string s;
+        std::ostringstream os;
+        os << input.rdbuf();
+        s = os.str();
+        return s;
+    }
+
+    void SubRipSubtitles::Delay(int delay, int fps, istream *input, ostream *output, int nrline) {
+        int time[7], mili = 0, blok = 0, tekst = 0, oldmili = 0, licznik;
+        regex pattern2{R"(\d+)"};
+        regex pattern{R"((\d+):(\d+):(\d+),(\d+) --> (\d+):(\d+):(\d+),(\d+))"};
+        smatch matches;
+        string s;
+        getline(*input, s);
+        if (delay < 0 && nrline==2)
+            throw NegativeFrameAfterShift(s, nrline-1);
+
+//        if (nrline>1) *output<<endl;
+        if (fps < 0)
+            throw invalid_argument("FPS cannot be negative");
+        if (regex_match(s, pattern2)) {
+            if (stoi(s) == nrline) {
+                *output << s << endl;
+                nrline++;
+                getline(*input, s);
+
+                if (regex_search(s, matches, pattern)) {
+
+
+                    for (int i = 0; i < 8; i++) time[i] = stoi(matches[i + 1].str());
+
+
+                    mili = 1000 * time[2] + 60000 * time[1] + 3600000 * time[0] + time[3];
+                    oldmili = mili;
+                    mili += delay;
+                    time[3] = mili % 1000;
+                    mili = mili / 1000;
+                    time[2] = mili % 60;
+                    mili = mili / 60;
+                    time[1] = mili % 60;
+                    mili = mili / 60;
+                    time[0] = mili;
+
+                    mili = 1000 * time[6] + 60000 * time[5] + 3600000 * time[4] + time[7];
+                    mili += delay;
+                    oldmili += delay;
+                    if (mili < oldmili)
+                        throw SubtitleEndBeforeStart(s, nrline - 1);
+                    time[7] = mili % 1000;
+                    mili = mili / 1000;
+                    time[6] = mili % 60;
+                    mili = mili / 60;
+                    time[5] = mili % 60;
+                    mili = mili / 60;
+                    time[4] = mili;
+                    blok++;
+
+                    *output << setfill('0') << setw(2) << time[0] << ":" << setfill('0') << setw(2)
+                            << time[1] << ":" << setfill('0') << setw(2) << time[2] << "," << setfill('0')
+                            << setw(3)
+                            << time[3] << " --> " << setfill('0') << setw(2) << time[4] << ":" << setfill('0')
+                            << setw(2) << time[5] << ":" << setfill('0') << setw(2) << time[6] << ","
+                            << setfill('0')
+                            << setw(3) << time[7] << endl;
+
+                }else {
+                    if (findchar(s, '.') == true)
+                        throw InvalidSubtitleLineFormat(s, nrline - 1);
+                    if (findchar(s, ';') == true)
+                        throw InvalidSubtitleLineFormat(s, nrline - 1);
+                    if (findchar(s, '--->') == true)
+                        throw InvalidSubtitleLineFormat(s, nrline - 1);
+                    if (occurences(s, "-->") != 1)
+                        throw InvalidSubtitleLineFormat(s, nrline - 1);
+                }
+                while (not s.empty()) {
+                    getline(*input, s);
+                    *output << s << endl;
+
+                }
+                *output;
+
+
+            } else throw OutOfOrderFrames(s, nrline-1);
+        }
+    }
+
+    NegativeFrameAfterShift::NegativeFrameAfterShift(string str, int line) : SubtitlesValidationException
+               ("At line " + std::to_string(line) + ": " + str, line) {};
+
+
+    SubtitleEndBeforeStart::SubtitleEndBeforeStart(string str, int line) : SubtitlesValidationException
+               ("At line " + std::to_string(line) + ": " + str, line) {};
+
+
+    MissingTimeSpecification::MissingTimeSpecification(string str, int line) : SubtitlesValidationException
+                ("At line " + std::to_string(line) + ": " + str, line) {};
+
+
+    OutOfOrderFrames::OutOfOrderFrames(string str, int line) : SubtitlesValidationException
+             ("At line " + std::to_string(line) + ": " + str, line) {};
+
+
+
+
+    InvalidSubtitleLineFormat::InvalidSubtitleLineFormat(string str, int line) : SubtitlesValidationException
+              ("At line " + std::to_string(line) + ": " + str, line) {};
+
+
+
+    bool findchar( std::string & tekst, char szukanyZnak )
     {
+        size_t znalezionaPozycja = tekst.find( szukanyZnak );
+        if( znalezionaPozycja == std::string::npos )
+            return false;
+        else
+            return true;
+
     }
+
+int occurences (string & tekst, string szukany )
+{
+    int occurrences1 = 0;
+    string::size_type start = 0;
+
+    while ((start = tekst.find(szukany, start)) != string::npos) {
+        ++occurrences1;
+        start += szukany.length(); // see the note
+    }
+    return occurrences1;
+}
+
 
 }
