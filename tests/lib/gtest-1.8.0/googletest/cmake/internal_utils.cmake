@@ -4,7 +4,7 @@
 # Note:
 #
 # - This file will be run twice when building Google Mock (once via
-#   Google Test's CMakeLists.txt, and once via Google Mock's).
+#   Google Test's CMakeLists.txt.txt, and once via Google Mock's).
 #   Therefore it shouldn't have any side effects other than defining
 #   the functions and macros.
 #
@@ -12,14 +12,14 @@
 #   Test and Google Mock's option() definitions, and thus must be
 #   called *after* the options have been defined.
 
-# Tweaks CMake's default compiler/linker settings to suit Google Test's needs.
+# Tweaks CMakeLists.txt's default compiler/linker settings to suit Google Test's needs.
 #
 # This must be a macro(), as inside a function string() can only
 # update variables in the function scope.
 macro(fix_default_compiler_settings_)
   if (MSVC)
-    # For MSVC, CMake sets certain flags to defaults we want to override.
-    # This replacement code is taken from sample in the CMake Wiki at
+    # For MSVC, CMakeLists.txt sets certain flags to defaults we want to override.
+    # This replacement code is taken from sample in the CMakeLists.txt Wiki at
     # http://www.cmake.org/Wiki/CMake_FAQ#Dynamic_Replace.
     foreach (flag_var
              CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
@@ -30,7 +30,7 @@ macro(fix_default_compiler_settings_)
         # copies of runtime library data in different modules, resulting in
         # hard-to-find crashes. When it is built as a static library, it is
         # preferable to use CRT as static libraries, as we don't have to rely
-        # on CRT DLLs being available. CMake always defaults to using shared
+        # on CRT DLLs being available. CMakeLists.txt always defaults to using shared
         # CRT libraries, so we override that default here.
         string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
       endif()
@@ -53,7 +53,7 @@ macro(config_compiler_and_linker)
 
   fix_default_compiler_settings_()
   if (MSVC)
-    # Newlines inside flags variables break CMake's NMake generator.
+    # Newlines inside flags variables break CMakeLists.txt's NMake generator.
     # TODO(vladl@google.com): Add -RTCs and -RTCu to debug builds.
     set(cxx_base_flags "-GS -W4 -WX -wd4251 -wd4275 -nologo -J -Zi")
     if (MSVC_VERSION LESS 1400)  # 1400 is Visual Studio 2005
@@ -108,7 +108,7 @@ macro(config_compiler_and_linker)
     set(cxx_no_rtti_flags "-features=no%rtti -DGTEST_HAS_RTTI=0")
   elseif (CMAKE_CXX_COMPILER_ID STREQUAL "VisualAge" OR
       CMAKE_CXX_COMPILER_ID STREQUAL "XL")
-    # CMake 2.8 changes Visual Age's compiler ID to "XL".
+    # CMakeLists.txt 2.8 changes Visual Age's compiler ID to "XL".
     set(cxx_exception_flags "-qeh")
     set(cxx_no_exception_flags "-qnoeh")
     # Until version 9.0, Visual Age doesn't define a macro to indicate

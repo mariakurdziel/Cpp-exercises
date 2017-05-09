@@ -1,11 +1,11 @@
 ########################################################################
-# CMake build script for Google Test.
+# CMakeLists.txt build script for Google Test.
 #
 # To run the tests for Google Test itself on Linux, use 'make test' or
 # ctest.  You can select which tests to run using 'ctest -R regex'.
 # For more options, run 'ctest --help'.
 
-# BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
+# BUILD_SHARED_LIBS is a standard CMakeLists.txt variable, but we declare it here to
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
@@ -40,7 +40,7 @@ endif()
 
 # Name of the project.
 #
-# CMake files in this project can refer to the root source directory
+# CMakeLists.txt files in this project can refer to the root source directory
 # as ${gtest_SOURCE_DIR} and to the root binary directory as
 # ${gtest_BINARY_DIR}.
 # Language "C" is required for find_package(Threads).
@@ -91,7 +91,7 @@ cxx_library(gtest "${cxx_strict}" src/gtest-all.cc)
 cxx_library(gtest_main "${cxx_strict}" src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
 
-# If the CMake version supports it, attach header directory information
+# If the CMakeLists.txt version supports it, attach header directory information
 # to the targets for when we are part of a parent build (ie being pulled
 # in via add_subdirectory() rather than being a standalone build).
 if (DEFINED CMAKE_VERSION AND NOT "${CMAKE_VERSION}" VERSION_LESS "2.8.11")
