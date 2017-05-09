@@ -65,14 +65,12 @@ namespace moviesubs {
     }
 
     void SubRipSubtitles::Delay(int delay, int fps, istream *input, ostream *output, int nrline) {
-        int time[7], mili = 0, blok = 0, tekst = 0, oldmili = 0, licznik;
+        int time[7], mili = 0, blok = 1, oldmili = 0;
         regex pattern2{R"(\d+)"};
         regex pattern{R"((\d+):(\d+):(\d+),(\d+) --> (\d+):(\d+):(\d+),(\d+))"};
         smatch matches;
         string s;
         getline(*input, s);
-        if (delay < 0 && nrline==2)
-            throw NegativeFrameAfterShift(s, nrline-1);
 
 //        if (nrline>1) *output<<endl;
         if (fps < 0)
@@ -80,7 +78,7 @@ namespace moviesubs {
         if (regex_match(s, pattern2)) {
             if (stoi(s) == nrline) {
                 *output << s << endl;
-                nrline++;
+                blok++;
                 getline(*input, s);
 
                 if (regex_search(s, matches, pattern)) {
@@ -104,7 +102,7 @@ namespace moviesubs {
                     mili += delay;
                     oldmili += delay;
                     if (mili < oldmili)
-                        throw SubtitleEndBeforeStart(s, nrline - 1);
+                        throw SubtitleEndBeforeStart(s, nrline);
                     time[7] = mili % 1000;
                     mili = mili / 1000;
                     time[6] = mili % 60;
@@ -112,7 +110,7 @@ namespace moviesubs {
                     time[5] = mili % 60;
                     mili = mili / 60;
                     time[4] = mili;
-                    blok++;
+
 
                     *output << setfill('0') << setw(2) << time[0] << ":" << setfill('0') << setw(2)
                             << time[1] << ":" << setfill('0') << setw(2) << time[2] << "," << setfill('0')
@@ -141,8 +139,13 @@ namespace moviesubs {
 
 
             } else throw OutOfOrderFrames(s, nrline-1);
+            if (nrline==2) {
+                if (delay < 0)
+                    throw NegativeFrameAfterShift(s, nrline - 1);
+            }
         }
     }
+
 
     NegativeFrameAfterShift::NegativeFrameAfterShift(string str, int line) : SubtitlesValidationException
                ("At line " + std::to_string(line) + ": " + str, line) {};
