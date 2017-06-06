@@ -5,13 +5,17 @@
 #ifndef JIMP_EXERCISES_TREE_H
 #define JIMP_EXERCISES_TREE_H
 
-
 #include <iostream>
 #include <string>
 #include <memory>
 #include <vector>
+#include <initializer_list>
+
 
 namespace tree {
+    template<typename T>
+    class InOrderTreeIterator;
+
     template<class T>
     class Tree {
     public:
@@ -22,7 +26,11 @@ namespace tree {
         ~Tree();
 
         bool operator<(const Tree<T> &e) const;
-
+        std::unique_ptr<Tree<T>> Right_child()
+        {
+            return std::move(right_);
+        }
+        Tree* Root() {return root_;}
         void Insert(const T &e) {
             if (value < e) {
                 if (left_ == nullptr) {
@@ -70,27 +78,34 @@ namespace tree {
         size_t Size() {
             return size_;
         }
-
+        std::unique_ptr<Tree<T>> Left_child()
+        {
+            return std::move(left_);
+        }
         int Value() {
             return value;
         }
+
+
 
     private:
         std::unique_ptr<Tree<T>> left_;
         std::unique_ptr<Tree<T>> right_;
         T value;
         size_t size_;
+        Tree* root_;
 
     };
 
     template<class T>
-    Tree<T>::Tree() {}
+    Tree<T>::Tree(): root_(this){}
 
     template<class T>
     Tree<T>::Tree(const T &e) :value(e) {
         left_ = nullptr;
         right_ = nullptr;
         size_ = 1;
+        root_ = this;
     }
 
     template<class T>
@@ -102,6 +117,7 @@ namespace tree {
         if (value < e.value) return true;
         else return false;
     }
+
 
 
 }

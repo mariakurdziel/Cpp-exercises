@@ -1,11 +1,14 @@
 project(tree)
 
-set(HEDEAR_FILES Tree.h)
+set(HEDEAR_FILES Tree.h TreeIterators.h)
 set(SOURCE_FILES Tree.cpp)
 
 add_library(libtree STATIC ${SOURCE_FILES})
 target_include_directories(libtree PUBLIC .)
+add_library(libtreeiterators STATIC )
+target_include_directories(libtreeiterators PUBLIC .)
 
 add_executable(tree ${SOURCE_FILES} main.cpp)
 
-target_link_libraries(tree libtree)
+target_link_libraries(libtreeiterators libtree)
+target_link_libraries(tree libtreeiterators)
